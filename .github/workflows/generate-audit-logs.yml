@@ -1,0 +1,27 @@
+name: Generate Audit Noise
+on: 
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: 'Number of toggle cycles (1 cycle = 2 logs)'
+        required: true
+        default: '50'
+
+permissions:
+  administration: write
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Noise Script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ITER_COUNT: ${{ github.event.inputs.iterations }}
+        run: |
+          chmod +x ./noise.sh
+          ./noise.sh
