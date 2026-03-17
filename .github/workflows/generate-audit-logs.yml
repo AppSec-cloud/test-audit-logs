@@ -5,7 +5,7 @@ on:
       iterations:
         description: 'Number of toggle cycles (1 cycle = 2 logs)'
         required: true
-        default: '50'
+        default: '5'
 
 permissions:
   administration: write
