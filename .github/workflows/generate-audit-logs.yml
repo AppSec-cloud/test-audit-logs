@@ -3,24 +3,26 @@ on:
   workflow_dispatch:
     inputs:
       iterations:
-        description: 'Number of toggle cycles (1 cycle = 2 logs)'
+        description: 'Number of cycles (1 cycle = 2 logs)'
         required: true
-        default: '5'
+        default: '50'
 
 permissions:
-  administration: write
   contents: write
+  # On SaaS, 'administration' isn't always allowed for the auto-token
+  # We will use a PAT for the actual API calls to be safe.
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Run Noise Script
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # IMPORTANT: Create a PAT and add it to your repo secrets as GEN_LOGS_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GEN_LOGS_TOKEN }}
           ITER_COUNT: ${{ github.event.inputs.iterations }}
         run: |
           chmod +x ./noise.sh
